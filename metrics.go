@@ -140,6 +140,21 @@ func (m *Measure) FieldValue(name string) (interface{}, error) {
 	return f.Data, nil
 }
 
+// InsertOrUpdateTag does the insertion or the update of a tag
+func (m *Measure) InsertOrUpdateTag(name string, data string) {
+	found := false
+	for _, t := range m.Tags {
+		if t.Name == name {
+			t.Data = data
+			found = true
+			break
+		}
+	}
+	if !found {
+		m.Tags = append(m.Tags, MakeTag(name, data))
+	}
+}
+
 // Field returns the field
 func (m *Measure) Field(name string) (Field, error) {
 	for _, f := range m.Flds {
