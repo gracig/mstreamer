@@ -143,9 +143,9 @@ func (m *Measure) FieldValue(name string) (interface{}, error) {
 // InsertOrUpdateTag does the insertion or the update of a tag
 func (m *Measure) InsertOrUpdateTag(name string, data string) {
 	found := false
-	for _, t := range m.Tags {
-		if t.Name == name {
-			t.Data = data
+	for i, _ := range m.Tags {
+		if m.Tags[i].Name == name {
+			m.Tags[i].Data = data
 			found = true
 			break
 		}
