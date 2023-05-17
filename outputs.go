@@ -48,6 +48,32 @@ func NewComposedOutput(dec Decoder, snk Sinker) (Output, error) {
 	}, nil
 }
 
+// NewOutput is
+func NewOutput(handler func(m Measure) error) (Output, error) {
+	if handler == nil {
+		return nil, errors.New("handler is nil")
+	}
+	return func(f Feedback, r MeasureReader) error {
+		for {
+			var measure Measure
+			err := r.Read(&measure)
+			if err != nil {
+				if err == io.EOF {
+					break
+				}
+				f("output read error- %v", err)
+				continue
+			}
+			err = handler(measure)
+			if err != nil {
+				f("handle output error- %v", err)
+				continue
+			}
+		}
+		return nil
+	}, nil
+}
+
 // newMergedOutput takes a list of outputs and returns a single output function
 func newMergedOutput(
 	ioPipe func() (*io.PipeReader, *io.PipeWriter),
