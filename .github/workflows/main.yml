@@ -1,4 +1,4 @@
-name: Go Test and Coverage
+name: Commit
 
 on:
   push:
@@ -25,14 +25,9 @@ jobs:
         uses: shogo82148/actions-goveralls@v1
         with:
           path-to-profile: coverage.out
-        
-      - name: Upload Coverage Report
-        uses: actions/upload-artifact@v2
+
+      - uses: phish108/autotag-action@v1.1.55
         with:
-          name: Coverage Report
-          path: coverage.out
-
-      - name: Generate Test Success Badge
-        run: echo "[![Tests](https://img.shields.io/badge/tests-passed-brightgreen.svg?style=flat-square)](https://github.com/${{ github.repository }})"
-
+          github-token: ${{ secrets.GITHUB_TOKEN}}
+          with-v: "true"
 
